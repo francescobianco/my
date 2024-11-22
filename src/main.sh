@@ -2,16 +2,15 @@
 module hosts
 
 main() {
-  args=""
-
+  local list
 
   while [ $# -gt 0 ]; do
       case "$1" in
           -*)
-              echo "Option: $1"
               case "$1" in
-                  --option1)
-                      echo "Handling --option1"
+                  --list)
+                      list=true
+                      shift
                       ;;
                   -o|--output)
                       echo "Handling $1 with value: $2"
@@ -26,25 +25,26 @@ main() {
               break
               ;;
       esac
-      shift # Passa al prossimo argomento
-  done
+      shift
+  done || true
 
-  # Salva i rimanenti argomenti
-  args="$*"
-
-  if [ "$#" -eq 0 ]; then
-      echo "No arguments supplied"
+  if [ -n "$MY_HOSTS" ]; then
+    hosts=$MY_HOSTS
+  else
+    hosts=$HOME/.hosts
   fi
 
-  echo "MY_HOSTS: $MY_HOSTS"
-  if [ -n "$MY_HOSTS" ]; then
-      hosts=$MY_HOSTS
-  else
-      hosts=$HOME/.hosts
+  if [ -n "$list" ]; then
+    my_print_list "$hosts"
+    exit
+  fi
+
+  if [ "$#" -eq 0 ]; then
+    echo "No arguments supplied"
   fi
 
   if [ "$#" -eq 1 ]; then
-      my_print_host "$hosts" "$1"
+    my_print_host "$hosts" "$1"
   fi
 
   echo "Remaining arguments: $* $#"
