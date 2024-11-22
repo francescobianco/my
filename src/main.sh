@@ -45,7 +45,6 @@ main() {
 
   if [ "$#" -eq 1 ]; then
     my_print_host "$hosts" "$1"
+    exit
   fi
-
-  echo "Remaining arguments: $* $#"
 }
