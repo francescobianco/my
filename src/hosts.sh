@@ -29,6 +29,7 @@ function my_print_list() {
   #echo "Hosts:${hosts}"
   while read -r variables; do
     [ -z "${variables}" ] && continue
+    [ "${variables:0:2}" == "##" ] && echo "====[ ${variables:3} ]===="
     [ "${variables:0:5}" != "host=" ] && continue
     my_print_list_item "${variables}"
   done < "${hosts}"
@@ -45,5 +46,5 @@ function my_print_list_item() {
     declare "$variable"
   done
 
-  echo "> ${name} (${host})"
+  echo "- ${name} (${host})"
 }
