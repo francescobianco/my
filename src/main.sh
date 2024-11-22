@@ -5,27 +5,27 @@ main() {
   local list
 
   while [ $# -gt 0 ]; do
-      case "$1" in
-          -*)
-              case "$1" in
-                  --list)
-                      list=true
-                      shift
-                      ;;
-                  -o|--output)
-                      echo "Handling $1 with value: $2"
-                      shift
-                      ;;
-                  *)
-                      echo "Unknown option: $1"
-                      ;;
-              esac
-              ;;
+    case "$1" in
+      -*)
+        case "$1" in
+          --list)
+            list=true
+            shift
+            ;;
+          -o|--output)
+            echo "Handling $1 with value: $2"
+            shift
+            ;;
           *)
-              break
-              ;;
+            echo "Unknown option: $1"
+            ;;
       esac
-      shift
+        ;;
+      *)
+        break
+        ;;
+    esac
+    shift
   done || true
 
   if [ -n "$MY_HOSTS" ]; then
