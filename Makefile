@@ -1,4 +1,8 @@
 
+push:
+	@git add .
+	@git commit -am "Update!" || true
+	@git push
 
 
 
