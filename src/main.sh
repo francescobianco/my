@@ -41,7 +41,7 @@ main() {
   fi
 
   if [ "$#" -eq 0 ]; then
-    echo "No arguments supplied"
+    error "No arguments supplied" 1
   fi
 
   if [ "$#" -eq 1 ]; then

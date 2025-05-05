@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+# @BP010: Release metadata
+# @package: my
+# @build_type: bin
+# @build_with: Mush v0.2.0 (2025-05-05 develop)
+# @build_date: 2025-05-05T19:49:25Z
+set -e
+use() { return 0; }
+extern() { return 0; }
+legacy() { return 0; }
+module() { return 0; }
+public() { return 0; }
+embed() { return 0; }
+inject() { return 0; }
+## BP004: Compile the entrypoint
+
+module hosts
+
+main() {
+  local list
+
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -*)
+        case "$1" in
+          --list)
+            list=true
+            shift
+            ;;
+          -o|--output)
+            echo "Handling $1 with value: $2"
+            shift
+            ;;
+          *)
+            echo "Unknown option: $1" >&2
+            exit 1
+            ;;
+      esac
+        ;;
+      *)
+        break
+        ;;
+    esac
+    shift
+  done || true
+
+  if [ -n "$MY_HOSTS" ]; then
+    hosts=$MY_HOSTS
+  else
+    hosts=$HOME/.hosts
+  fi
+
+  if [ -n "$list" ]; then
+    my_print_list "$hosts"
+    exit
+  fi
+
+  if [ "$#" -eq 0 ]; then
+    echo "No arguments supplied"
+  fi
+
+  if [ "$#" -eq 1 ]; then
+    my_print_host "$hosts" "$1"
+    exit
+  fi
+}
+
+function my_print_host() {
+  local hosts
+  local search
+  local variables
+
+  hosts=$1
+  search=$2
+
+  variables=$(grep "name=${search}" "${hosts}" | head -1)
+
+  if [ -z "$variables" ]; then
+    echo "No such host by: ${search}" >&2
+    exit 1
+  fi
+
+  for variable in $variables; do
+    declare "$variable"
+  done
+
+  echo "${host}"
+}
+
+function my_print_list() {
+  local hosts
+  local variables
+
+  hosts=$1
+  #echo "Hosts:${hosts}"
+  while read -r variables; do
+    [ -z "${variables}" ] && continue
+    [ "${variables:0:2}" == "##" ] && echo "====[ ${variables:3} ]===="
+    [ "${variables:0:5}" != "host=" ] && continue
+    my_print_list_item "${variables}"
+  done < "${hosts}"
+}
+
+function my_print_list_item() {
+  local variables
+  local name
+  local host
+
+  variables=$1
+
+  for variable in $variables; do
+    declare "$variable"
+  done
+
+  echo "- ${name} (${host})"
+}
+## BP005: Execute the entrypoint
+main "$@"
