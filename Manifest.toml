@@ -10,3 +10,6 @@ error = "*"
 
 [dev-dependencies]
 validate = "path packages/validate"
+
+[features]
+validate = true
