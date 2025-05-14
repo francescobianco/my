@@ -3,7 +3,7 @@
 # @package: my
 # @build_type: bin
 # @build_with: Mush v0.2.0 (2025-05-05 develop)
-# @build_date: 2025-05-05T19:49:25Z
+# @build_date: 2025-05-14T15:31:01Z
 set -e
 use() { return 0; }
 extern() { return 0; }
@@ -13,6 +13,7 @@ public() { return 0; }
 embed() { return 0; }
 inject() { return 0; }
 ## BP004: Compile the entrypoint
+#extern package error
 
 module hosts
 
@@ -35,7 +36,7 @@ main() {
             echo "Unknown option: $1" >&2
             exit 1
             ;;
-      esac
+        esac
         ;;
       *)
         break
@@ -56,7 +57,7 @@ main() {
   fi
 
   if [ "$#" -eq 0 ]; then
-    echo "No arguments supplied"
+    error "No arguments supplied" 1
   fi
 
   if [ "$#" -eq 1 ]; then

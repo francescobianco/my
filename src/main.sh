@@ -1,3 +1,4 @@
+#extern package error
 
 module hosts
 
@@ -20,7 +21,7 @@ main() {
             echo "Unknown option: $1" >&2
             exit 1
             ;;
-      esac
+        esac
         ;;
       *)
         break
